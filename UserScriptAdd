@@ -1,0 +1,23 @@
+// ==UserScript==
+// @match        https://www.upwork.com/*
+
+(function() {
+    'use strict';
+
+    const notificationSoundUrl = 'https://www.myinstants.com/media/sounds/tindeck_1.mp3';
+    const audio = new Audio(notificationSoundUrl);
+    let lastMessageCount = 0;
+
+    function checkForNewMessages() {
+        const messageBadge = document.querySelector('.notification-badge--messages'); // Replace with the correct selector for Upwork
+        if (messageBadge) {
+            const currentCount = parseInt(messageBadge.innerText.trim(), 10);
+            if (!isNaN(currentCount) && currentCount > lastMessageCount) {
+                audio.play().catch(error => console.error('Audio play failed:', error));
+                lastMessageCount = currentCount;
+            }
+        }
+    }
+
+    setInterval(checkForNewMessages, 5000);
+})();
